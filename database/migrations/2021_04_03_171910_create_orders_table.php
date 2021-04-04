@@ -17,6 +17,8 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->integer('created_by');
             $table->string('address');
+            $table->double('amount');
+            $table->boolean('status');
             $table->timestamps();
             $table->softDeletes();
         });

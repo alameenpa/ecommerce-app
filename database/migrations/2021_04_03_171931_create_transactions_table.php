@@ -16,9 +16,11 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->integer('order_id');
-            $table->integer('order_details_id');
-            $table->string('status');
-            $table->integer('created_by');
+            $table->integer('product_id');
+            $table->double('quantity');
+            $table->integer('status');
+            $table->integer('updated_by');
+            $table->double('amount');
             $table->timestamps();
             $table->softDeletes();
         });
