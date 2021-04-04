@@ -5,10 +5,10 @@
          <div class="row">
             <div class="col-lg-12 margin-tb">
                <div class="pull-left">
-                    <h2><i class="fa fa-users" aria-hidden="true"></i>&nbsp;Users List</h2>
+                    <h2><i class="fa fa-users" aria-hidden="true"></i>&nbsp;Products List</h2>
                </div>
                <div class="mb-3" style="float: right;">
-                  <a class="btn btn-info" onClick="addUser()" href="javascript:void(0)"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;New</a>
+                  <a class="btn btn-info" onClick="addProduct()" href="javascript:void(0)"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;New</a>
                </div>
             </div>
             <div class="card-body">
@@ -19,17 +19,17 @@
       </div>
 
       <!-- boostrap user model -->
-      <div class="modal fade" id="user-modal" aria-hidden="true">
+      <div class="modal fade" id="product-modal" aria-hidden="true">
          <div class="modal-dialog modal-lg">
             <div class="modal-content">
                <div class="modal-header">
-                  <h4 class="modal-title" id="userModal"></h4>
+                  <h4 class="modal-title" id="productModal"></h4>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                </div>
                <div class="modal-body">
-                  <form action="javascript:void(0)" id="userForm" name="userForm" class="form-horizontal" method="POST">
+                  <form action="javascript:void(0)" id="productForm" name="productForm" class="form-horizontal" method="POST">
                      <input type="hidden" name="id" id="id">
                      <div class="form-group">
                      <label for="name" class="col-sm-2 control-label">Name</label>
@@ -38,9 +38,15 @@
                         </div>
                      </div>
                      <div class="form-group">
-                     <label for="email" class="col-sm-2 control-label">Email</label>
+                     <label for="email" class="col-sm-2 control-label">Price</label>
                         <div class="col-sm-12">
-                           <input type="email" class="form-control" id="email" name="email" required="">
+                           <input type="text" class="form-control" id="price" name="price" required="">
+                        </div>
+                     </div>
+                     <div class="form-group">
+                     <label for="email" class="col-sm-2 control-label">Description</label>
+                        <div class="col-sm-12">
+                           <textarea class="form-control" id="description" name="description" required=""></textarea>
                         </div>
                      </div>
                      <div class="col-sm-offset-2 col-sm-10">
@@ -54,6 +60,7 @@
          </div>
       </div>
       <!-- end bootstrap model -->
+
    <script type="text/javascript">
    $(document).ready( function () {
         $.ajaxSetup({
@@ -63,25 +70,26 @@
         });
     });
 
-    function addUser(){
-        $('#userForm').trigger("reset");
-        $('#userModal').html("New User");
-        $('#user-modal').modal('show');
+    function addProduct(){
+        $('#productForm').trigger("reset");
+        $('#productModal').html("New Product");
+        $('#product-modal').modal('show');
         $('#id').val('');
     }
 
     function editFunc(id){
         $.ajax({
             type:"POST",
-            url: "{{ route('users.edit') }}",
+            url: "{{ route('products.edit') }}",
             data: {'id':id},
             dataType: 'json',
             success: function(res){
-                $('#userModal').html("Edit User");
-                $('#user-modal').modal('show');
+                $('#productModal').html("Edit Product");
+                $('#product-modal').modal('show');
                 $('#id').val(res.id);
                 $('#name').val(res.name);
-                $('#email').val(res.email);
+                $('#description').val(res.description);
+                $('#price').val(res.price);
             }
         });
     }
@@ -99,13 +107,13 @@
         }).then(function() {
             $.ajax({
                 type:"POST",
-                url: "{{ route('users.delete') }}",
+                url: "{{ route('products.delete') }}",
                 data: { id: id },
                 dataType: 'json',
                 success: function(res){
                     if(res.success) {
                         swal('Success', 'Operation Successfully completed', 'success');
-                        var oTable = $('#list-users').dataTable();
+                        var oTable = $('#list-products').dataTable();
                         oTable.fnDraw(false);
                     }else{
                         swal('Error', res.message, 'error');
@@ -120,21 +128,24 @@
        if($('#name').val() == "" || $('#name').val() == undefined || $('#name').val() == null) {
          swal('Error', "Please enter a name", 'error');
          return false;
-        }else if($('#email').val() == "" || $('#email').val() == undefined || $('#email').val() == null) {
-         swal('Error', "Please enter email", 'error');
+        }else if($('#description').val() == "" || $('#description').val() == undefined || $('#description').val() == null) {
+         swal('Error', "Please enter description", 'error');
+         return false;
+        }else if($('#price').val() == "" || $('#price').val() == undefined || $('#price').val() == null) {
+         swal('Error', "Please enter price", 'error');
          return false;
         }else{
             return true;
         }
     }
 
-    $('#userForm').submit(function(e) {
+    $('#productForm').submit(function(e) {
         e.preventDefault();
         var formData = new FormData(this);
         if(validateForm()){
             swal({
                 title: "Are you sure?",
-                text: "Your want to save the user details",
+                text: "Your want to save the product details",
                 type: "success",
                 showCancelButton: true,
                 confirmButtonClass: "btn-success",
@@ -143,7 +154,7 @@
             }).then(function() {
                 $.ajax({
                     type:'POST',
-                    url: "{{ route('users.store')}}",
+                    url: "{{ route('products.store')}}",
                     data: formData,
                     cache:false,
                     contentType: false,
@@ -151,8 +162,8 @@
                     success: function(res) {
                     if(res.success) {
                             swal('Success', 'Operation Successfully completed', 'success');
-                            $("#user-modal").modal('hide');
-                            var oTable = $('#list-users').dataTable();
+                            $("#product-modal").modal('hide');
+                            var oTable = $('#list-products').dataTable();
                             oTable.fnDraw(false);
                             $("#btn-save").html('Submit');
                             $("#btn-save"). attr("disabled", false);

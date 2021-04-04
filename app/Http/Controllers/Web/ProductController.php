@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\DataTables\UsersDataTable;
+use App\DataTables\ProductsDataTable;
 use App\Http\Controllers\Controller;
-use App\Repository\UserRepository;
+use App\Repository\ProductRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
-class UserController extends Controller
+class ProductController extends Controller
 {
+    protected $productRepository;
 
-    protected $userRepository;
-
-    public function __construct(UserRepository $userRepository)
+    public function __construct(ProductRepository $productRepository)
     {
         $this->middleware('auth');
-        $this->userRepository = $userRepository;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -24,9 +23,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(UsersDataTable $dataTable)
+    public function index(ProductsDataTable $dataTable)
     {
-        return $dataTable->render('users.index');
+        return $dataTable->render('products.index');
     }
 
     /**
@@ -38,15 +37,14 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try {
-            $userId = $request->id;
+            $id = $request->id;
             $inputArray = [
                 'name' => ucwords($request->name),
-                'email' => $request->email,
+                'description' => $request->description,
+                'price' => $request->price,
+                'created_by' => Auth::user()->id,
             ];
-            if ($userId == null) {
-                $inputArray['password'] = Hash::make(rand());
-            }
-            $user = $this->userRepository->saveUser($userId, $inputArray);
+            $product = $this->productRepository->saveProduct($id, $inputArray);
             return Response()->json(array('success' => true));
         } catch (\Exception $e) {
             return response()->json(array('success' => false, 'message' => 'Operation Failed, please contact admin'));
@@ -61,8 +59,8 @@ class UserController extends Controller
      */
     public function edit(Request $request)
     {
-        $user = $this->userRepository->getUser($request->id);
-        return Response()->json($user);
+        $product = $this->productRepository->getProduct($request->id);
+        return Response()->json($product);
     }
 
     /**
@@ -74,7 +72,7 @@ class UserController extends Controller
     public function destroy(Request $request)
     {
         try {
-            $status = $this->userRepository->destroyUser($request->id);
+            $status = $this->productRepository->destroyProduct($request->id);
             return Response()->json(array('success' => true));
         } catch (\Exception $e) {
             return response()->json(array('success' => false, 'message' => 'Operation Failed, please contact admin'));

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Auth::routes();
@@ -26,3 +26,9 @@ Route::get('/users', [App\Http\Controllers\Web\UserController::class, 'index'])-
 Route::post('/users/store', [App\Http\Controllers\Web\UserController::class, 'store'])->name('users.store');
 Route::post('/users/edit', [App\Http\Controllers\Web\UserController::class, 'edit'])->name('users.edit');
 Route::post('/users/delete', [App\Http\Controllers\Web\UserController::class, 'destroy'])->name('users.delete');
+
+//products related routes
+Route::get('/products', [App\Http\Controllers\Web\ProductController::class, 'index'])->name('products.index');
+Route::post('/products/store', [App\Http\Controllers\Web\ProductController::class, 'store'])->name('products.store');
+Route::post('/products/edit', [App\Http\Controllers\Web\ProductController::class, 'edit'])->name('products.edit');
+Route::post('/products/delete', [App\Http\Controllers\Web\ProductController::class, 'destroy'])->name('products.delete');

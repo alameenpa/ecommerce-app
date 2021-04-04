@@ -2,9 +2,9 @@
 
 namespace App\Repository;
 
-use App\Models\User;
+use App\Models\Product;
 
-class UserRepository
+class ProductRepository
 {
     protected $model;
 
@@ -13,7 +13,7 @@ class UserRepository
      *
      * @param  $model
      */
-    public function __construct(User $model)
+    public function __construct(Product $model)
     {
         $this->model = $model;
     }
@@ -23,7 +23,7 @@ class UserRepository
      *
      * @return \App\User collection
      */
-    public function getUsers()
+    public function getProducts()
     {
         return $this->model->get();
     }
@@ -34,7 +34,7 @@ class UserRepository
      * @param  $id
      * @return \App\User object
      */
-    public function getUser($id)
+    public function getProduct($id)
     {
         return $this->model->find($id);
     }
@@ -45,7 +45,7 @@ class UserRepository
      * @param  $id, $dataArray
      * @return \App\User object
      */
-    public function saveUser($id = null, $dataArray)
+    public function saveProduct($id = null, $dataArray)
     {
         return $this->model::updateOrCreate(['id' => $id], $dataArray);
     }
@@ -56,9 +56,8 @@ class UserRepository
      * @param  $id
      * @return boolean
      */
-    public function destroyUser($id)
+    public function destroyProduct($id)
     {
         return $this->model->find($id)->delete();
     }
-
 }
