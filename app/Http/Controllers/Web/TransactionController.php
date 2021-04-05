@@ -38,16 +38,16 @@ class TransactionController extends Controller
      */
     public function status(Request $request)
     {
-        // try {
-        DB::beginTransaction();
-        $transaction = $this->transactionRepository->statusUpdate($request->get('id'), $request->get('transaction_status'));
-        $status = $this->transactionRepository->changeOrderStatusByTransactionStatusChange($request->get('id'));
-        $this->transactionRepository->sendEmailWithTransactionStatusChange($transaction, $request->get('transaction_status'));
-        DB::commit();
-        return response()->json(['transaction' => $transaction]);
-        // } catch (\Exception $e) {
-        //     DB::rollback();
-        //     return response()->json(array('transaction' => []));
-        // }
+        try {
+            DB::beginTransaction();
+            $transaction = $this->transactionRepository->statusUpdate($request->get('id'), $request->get('transaction_status'));
+            $status = $this->transactionRepository->changeOrderStatusByTransactionStatusChange($request->get('id'));
+            $this->transactionRepository->sendEmailWithTransactionStatusChange($transaction, $request->get('transaction_status'));
+            DB::commit();
+            return response()->json(['transaction' => $transaction]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(array('transaction' => []));
+        }
     }
 }

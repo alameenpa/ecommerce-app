@@ -187,13 +187,14 @@ class ApiController extends Controller
 
             $inputArray = [
                 'address' => $request->address,
-                'created_by' => Auth::user()->id,
+                'created_by' => auth()->user()->id,
                 'amount' => $request->amount,
                 'status' => false,
             ];
             //create orders
             $order = $this->orderRepository->createOrder(null, $inputArray);
-            $mailStatus = $this->orderRepository->sendEmailWithOrder($order);
+            $orderDetails = $this->orderRepository->getOrderDetails($order->id);
+            $mailStatus = $this->orderRepository->sendEmailWithOrder($orderDetails);
 
             //create transactions associated with the order
             foreach ($itemsArray as $item) {
