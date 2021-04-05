@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Order;
+use App\Models\Transaction;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
@@ -25,8 +26,9 @@ class OrdersDataTable extends DataTable
                 return ($row->status == 0) ? 'Active' : 'Closed';
             })
             ->addColumn('action', function ($row) {
+                $count = Transaction::where('order_id', $row->id)->nonCompletedTransactions()->count();
                 $btn = '';
-                if ($row->status == 0) {
+                if ($row->status == 0 && ($count == 0)) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip" onclick="editFunc(' . $row->id . ')" data-original-title="Edit" class="edit btn btn-success edit">Edit</a>';
                     $btn = $btn . ' <a href="javascript:void(0);" id="cancel-order" onclick="cancelOrder(' . $row->id . ')" data-toggle="tooltip" data-original-title="Cancel" class="cancel btn btn-danger">Cancel</a>';
                 }
@@ -43,7 +45,7 @@ class OrdersDataTable extends DataTable
      */
     public function query(Order $model)
     {
-        return $model->newQuery();
+        return $model::with('transactions')->newQuery();
     }
 
     /**

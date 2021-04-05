@@ -20,4 +20,9 @@ class Transaction extends Model
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
+
+    public function scopeNonCompletedTransactions($query)
+    {
+        return $query->whereNotIn('status', [0, 1])->where('active', 1);
+    }
 }

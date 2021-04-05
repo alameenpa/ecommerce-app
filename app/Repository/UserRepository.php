@@ -11,7 +11,7 @@ class UserRepository
     /**
      * Instantiate repository
      *
-     * @param  $model
+     * @param  App\Models\User $model
      */
     public function __construct(User $model)
     {
@@ -21,7 +21,7 @@ class UserRepository
     /**
      * fetch all users
      *
-     * @return \App\User collection
+     * @return \App\Models\User collection
      */
     public function getUsers()
     {
@@ -32,7 +32,7 @@ class UserRepository
      * fetch a single users by id
      *
      * @param  $id
-     * @return \App\User object
+     * @return \App\Models\User object
      */
     public function getUser($id)
     {
@@ -43,7 +43,7 @@ class UserRepository
      * create a user or update by id
      *
      * @param  $id, $dataArray
-     * @return \App\User object
+     * @return \App\Models\User object
      */
     public function saveUser($id = null, $dataArray)
     {

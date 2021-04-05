@@ -11,7 +11,7 @@ class ProductRepository
     /**
      * Instantiate repository
      *
-     * @param  $model
+     * @param  App\Models\Product $model
      */
     public function __construct(Product $model)
     {
@@ -19,9 +19,9 @@ class ProductRepository
     }
 
     /**
-     * fetch all users
+     * fetch all products
      *
-     * @return \App\User collection
+     * @return App\Models\Product collection
      */
     public function getProducts()
     {
@@ -29,10 +29,10 @@ class ProductRepository
     }
 
     /**
-     * fetch a single users by id
+     * fetch a single product by id
      *
      * @param  $id
-     * @return \App\User object
+     * @return App\Models\Product object
      */
     public function getProduct($id)
     {
@@ -40,10 +40,10 @@ class ProductRepository
     }
 
     /**
-     * create a user or update by id
+     * create a product or update by id
      *
      * @param  $id, $dataArray
-     * @return \App\User object
+     * @return App\Models\Product object
      */
     public function saveProduct($id = null, $dataArray)
     {
@@ -51,7 +51,7 @@ class ProductRepository
     }
 
     /**
-     * delete a user by id
+     * delete a product by id
      *
      * @param  $id
      * @return boolean

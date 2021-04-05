@@ -11,7 +11,7 @@ class OrderRepository
     /**
      * Instantiate repository
      *
-     * @param  $model
+     * @param  App\Models\Order $model
      */
     public function __construct(Order $model)
     {
@@ -19,9 +19,9 @@ class OrderRepository
     }
 
     /**
-     * fetch a single users by id
+     * fetch all order by id
      *
-     * @return \App\User object
+     * @return App\Models\Order collection
      */
     public function getOrders()
     {
@@ -29,10 +29,10 @@ class OrderRepository
     }
 
     /**
-     * fetch a single users by id
+     * fetch a single order by id
      *
      * @param  $id
-     * @return \App\User object
+     * @return App\Models\Order object
      */
     public function getOrderDetails($id)
     {
@@ -40,10 +40,10 @@ class OrderRepository
     }
 
     /**
-     * create a user or update by id
+     * create an order or update by id
      *
      * @param  $id, $dataArray
-     * @return \App\User object
+     * @return App\Models\Order object
      */
     public function createOrder($id = null, $dataArray)
     {
@@ -51,7 +51,7 @@ class OrderRepository
     }
 
     /**
-     * delete a user by id
+     * change status of an order by id
      *
      * @param  $id
      * @return boolean

@@ -6,6 +6,7 @@ use App\DataTables\UsersDataTable;
 use App\Http\Controllers\Controller;
 use App\Repository\UserRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -13,6 +14,9 @@ class UserController extends Controller
 
     protected $userRepository;
 
+    /**
+     * @param App\Repository\UserRepository $userRepository
+     */
     public function __construct(UserRepository $userRepository)
     {
         $this->middleware('auth');
@@ -38,6 +42,12 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try {
+            $validated = $request->validate([
+                'name' => 'required|max:50',
+                'email' => 'required|email',
+            ]);
+
+            DB::beginTransaction();
             $userId = $request->id;
             $inputArray = [
                 'name' => ucwords($request->name),
@@ -46,10 +56,13 @@ class UserController extends Controller
             if ($userId == null) {
                 $inputArray['password'] = Hash::make(rand());
             }
+            //save user
             $user = $this->userRepository->saveUser($userId, $inputArray);
+            DB::commit();
             return Response()->json(array('success' => true));
         } catch (\Exception $e) {
-            return response()->json(array('success' => false, 'message' => 'Operation Failed, please contact admin'));
+            DB::rollback();
+            return response()->json(array('success' => false, 'message' => $e->getMessage()));
         }
     }
 
@@ -61,6 +74,7 @@ class UserController extends Controller
      */
     public function edit(Request $request)
     {
+        //fetch user by id
         $user = $this->userRepository->getUser($request->id);
         return Response()->json($user);
     }
@@ -74,10 +88,14 @@ class UserController extends Controller
     public function destroy(Request $request)
     {
         try {
+            DB::beginTransaction();
+            //delete user
             $status = $this->userRepository->destroyUser($request->id);
+            DB::commit();
             return Response()->json(array('success' => true));
         } catch (\Exception $e) {
-            return response()->json(array('success' => false, 'message' => 'Operation Failed, please contact admin'));
+            DB::rollback();
+            return response()->json(array('success' => false, 'message' => $e->getMessage()));
         }
     }
 }

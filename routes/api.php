@@ -14,9 +14,13 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::middleware('auth:api')->group(function () {
-    Route::post('/products', [App\Http\Controllers\Api\ApiController::class, 'getProducts'])->name('api.products');
+    //products related
+    Route::get('/products', [App\Http\Controllers\Api\ApiController::class, 'getProducts'])->name('api.products');
     Route::post('/product', [App\Http\Controllers\Api\ApiController::class, 'getSingleProduct'])->name('api.product');
-    Route::post('/orders', [App\Http\Controllers\Api\ApiController::class, 'getOrders'])->name('api.orders');
+
+    //orders related
+    Route::get('/orders', [App\Http\Controllers\Api\ApiController::class, 'getOrders'])->name('api.orders');
     Route::post('/order', [App\Http\Controllers\Api\ApiController::class, 'getSingleOrder'])->name('api.order');
     Route::post('/order/cancel', [App\Http\Controllers\Api\ApiController::class, 'cancelOrder'])->name('api.order.cancel');
+    Route::post('/order/create', [App\Http\Controllers\Api\ApiController::class, 'createOrder'])->name('api.order.create');
 });

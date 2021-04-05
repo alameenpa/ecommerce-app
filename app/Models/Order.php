@@ -14,11 +14,6 @@ class Order extends Model
 
     public function transactions()
     {
-        return $this->hasMany(Transaction::class, 'order_id', 'id');
-    }
-
-    public function scopeNonCompletedTransactions($query)
-    {
-        return $query->whereNotIn('status', [0, 4]);
+        return $this->hasMany(Transaction::class, 'order_id', 'id')->where('active', 1);
     }
 }
