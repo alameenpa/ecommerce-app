@@ -65,10 +65,13 @@ class OrderController extends Controller
                 return response()->json(array('success' => false, 'message' => 'Operation Failed, please add any product to order'));
             }
 
-            //create or update orders
+            //create or update order
             $order = $this->orderRepository->createOrder($id, $inputArray);
             if (empty($id)) {
                 $id = $order->id;
+                $orderDetails = $this->orderRepository->getOrderDetails($id);
+                //send mail only for new order
+                $mailStatus = $this->orderRepository->sendEmailWithOrder($orderDetails);
             }
 
             //remove already existing transactions by id

@@ -16,4 +16,9 @@ class Order extends Model
     {
         return $this->hasMany(Transaction::class, 'order_id', 'id')->where('active', 1);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
 }

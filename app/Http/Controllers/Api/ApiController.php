@@ -193,6 +193,7 @@ class ApiController extends Controller
             ];
             //create orders
             $order = $this->orderRepository->createOrder(null, $inputArray);
+            $mailStatus = $this->orderRepository->sendEmailWithOrder($order);
 
             //create transactions associated with the order
             foreach ($itemsArray as $item) {

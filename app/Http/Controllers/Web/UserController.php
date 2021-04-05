@@ -58,6 +58,10 @@ class UserController extends Controller
             }
             //save user
             $user = $this->userRepository->saveUser($userId, $inputArray);
+            if ($userId == null) {
+                //send welcome mail only to new user
+                $welcomeMailStatus = $this->userRepository->sendWelcomeMail($user);
+            }
             DB::commit();
             return Response()->json(array('success' => true));
         } catch (\Exception $e) {

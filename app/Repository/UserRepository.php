@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Models\User;
+use App\Notifications\NewUserNotify;
+use Illuminate\Support\Facades\Notification;
 
 class UserRepository
 {
@@ -59,6 +61,18 @@ class UserRepository
     public function destroyUser($id)
     {
         return $this->model->find($id)->delete();
+    }
+
+    /**
+     * user signup mail notification
+     * @param  $user
+     * @return boolean
+     */
+    public function sendWelcomeMail($user)
+    {
+        Notification::route('mail', $user->email) //Sending email to user
+            ->notify(new NewUserNotify($user));
+        return true;
     }
 
 }

@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Models\Order;
+use App\Notifications\NewOrderNotify;
+use Illuminate\Support\Facades\Notification;
 
 class OrderRepository
 {
@@ -36,7 +38,7 @@ class OrderRepository
      */
     public function getOrderDetails($id)
     {
-        return $this->model::with(['transactions.product'])->find($id);
+        return $this->model::with(['transactions.product', 'user'])->find($id);
     }
 
     /**
@@ -59,5 +61,17 @@ class OrderRepository
     public function changeOrderStatus($id, $status)
     {
         return $this->model->find($id)->update(["status" => $status]);
+    }
+
+    /**
+     * order mail notification
+     * @param  $order
+     * @return boolean
+     */
+    public function sendEmailWithOrder($order)
+    {
+        Notification::route('mail', $order->user->email) //Sending email to ordered user
+            ->notify(new NewOrderNotify($order));
+        return true;
     }
 }

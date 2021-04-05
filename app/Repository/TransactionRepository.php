@@ -3,7 +3,10 @@
 namespace App\Repository;
 
 use App\Models\Transaction;
+use App\Notifications\OrderStatusChangeNotify;
+use Config;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class TransactionRepository
 {
@@ -28,7 +31,7 @@ class TransactionRepository
      */
     public function getTransaction($id)
     {
-        return $this->model::with(['product', 'order'])->find($id);
+        return $this->model::with(['product', 'order.user'])->find($id);
     }
 
     /**
@@ -152,5 +155,19 @@ class TransactionRepository
     public function cancelTransactionsByOrder($id)
     {
         return $this->model->where("order_id", $id)->update(['status' => 0]);
+    }
+
+    /**
+     * transaction status update mail notification
+     * @param  $transaction, $status
+     * @return boolean
+     */
+    public function sendEmailWithTransactionStatusChange($transaction, $statusCode)
+    {
+        $transactionStatus = Config::get('constants.transactionStatus');
+        $status = $transactionStatus[$statusCode];
+        Notification::route('mail', $transaction->order->user->email) //Sending email to ordered user
+            ->notify(new OrderStatusChangeNotify($transaction, $status));
+        return true;
     }
 }
