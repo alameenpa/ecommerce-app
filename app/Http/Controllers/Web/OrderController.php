@@ -106,10 +106,15 @@ class OrderController extends Controller
     public function cancel(Request $request)
     {
         try {
-            $status = $this->orderRepository->changeOrderStatus($request->id, 2);
+            $transactionInitiated = $this->transactionRepository->isProcessInitiatedOrder($request->id);
+            if ($transactionInitiated) {
+                return response()->json(array('success' => false, 'message' => "Unable to cancel order, Some transactions already initiated"));
+            }
+            $status = $this->orderRepository->changeOrderStatus($request->id, 1);
+            $transactionStatus = $this->transactionRepository->cancelTransactionsByOrder($request->id);
             return Response()->json(array('success' => true));
         } catch (\Exception $e) {
-            return response()->json(array('success' => false, 'message' => 'Operation Failed, please contact admin'));
+            return response()->json(array('success' => false, 'message' => $e->getMessage()));
         }
     }
 }

@@ -103,4 +103,30 @@ class TransactionRepository
         }
         return true;
     }
+
+    public function isProcessInitiatedOrder($orderId)
+    {
+        $order = $this->orderRepository->getOrderDetails($orderId);
+        if ($order->status == 1) {
+            return true;
+        }
+
+        $openTransactionsCount = $this->model::with(['product'])
+            ->where('active', 1)
+            ->where("order_id", $orderId)
+            ->whereNotIn('status', [1, 0])
+            ->count();
+
+        if ($openTransactionsCount > 0) {
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public function cancelTransactionsByOrder($id)
+    {
+        return $this->model->where("order_id", $id)->update(['status' => 0]);
+    }
 }

@@ -21,6 +21,16 @@ class OrderRepository
     /**
      * fetch a single users by id
      *
+     * @return \App\User object
+     */
+    public function getOrders()
+    {
+        return $this->model::with('transactions')->get();
+    }
+
+    /**
+     * fetch a single users by id
+     *
      * @param  $id
      * @return \App\User object
      */
