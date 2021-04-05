@@ -39,15 +39,18 @@ class TransactionRepository
     {
         $currentTransaction = $this->model->find($id);
         $sts = $this->model->find($id)->update(['active' => 0]);
-        $newTransactionObject = $this->createTransaction(null, [
-            "product_id" => $currentTransaction->product_id,
-            "order_id" => $currentTransaction->order_id,
-            "quantity" => $currentTransaction->quantity,
-            "updated_by" => Auth::user()->id,
-            "status" => $status,
-            "active" => 1,
-            "amount" => $currentTransaction->amount,
-        ]);
+
+        if ($sts) {
+            $newTransactionObject = $this->createTransaction(null, [
+                "product_id" => $currentTransaction->product_id,
+                "order_id" => $currentTransaction->order_id,
+                "quantity" => $currentTransaction->quantity,
+                "updated_by" => Auth::user()->id,
+                "status" => $status,
+                "active" => 1,
+                "amount" => $currentTransaction->amount,
+            ]);
+        }
         return $this->getTransaction($newTransactionObject->id);
     }
 
@@ -88,6 +91,7 @@ class TransactionRepository
     {
         $transaction = $this->getTransaction($id);
         $openTransactionsCount = $this->model::with(['product'])
+            ->where('active', 1)
             ->where("order_id", $transaction->order_id)
             ->whereNotIn('status', [0, 4])
             ->count();
