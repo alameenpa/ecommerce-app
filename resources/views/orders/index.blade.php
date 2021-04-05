@@ -264,9 +264,9 @@
                 if(res.transactions) {
                     $('#transactionModal').html("Transactions Details");
                     $('#transaction-modal').modal('show');
-                    let html ="<table class='table table-striped transaction-table'><thead><th>Product</th><th>Quantity</th><th>Price</th><th>Status</th><th>Last Updated</th></thead><tbody>";
+                    let html ="<table class='table table-striped transaction-table'><thead><th>Product</th><th>Quantity</th><th>Price</th><th>Status</th><th>Last Updated</th></thead><tbody id='transaction-tbl-body'>";
                     $.each(res.transactions, function(ind, val){
-                        html +="<tr class='transaction-item-"+val.id+"'><td>"+val.product.name+"</td><td>"+val.quantity+"</td><td>"+val.amount+"</td><td><select class='form-control' id='transaction_status_"+val.id+"' onchange='changeStatus("+val.id+")' "+((val.status == 0)? 'disabled':'')+"><option value='0' "+((val.status == 0) ? 'selected':(val.status != 1)? 'disabled':'')+">Cancelled</option><option value='1' "+((val.status == 1) ? 'selected':((val.status > 1)? 'disabled':''))+">Received</option><option value='2' "+((val.status == 2) ? 'selected':((val.status > 2)? 'disabled':''))+">Confirmed</option><option value='3' "+((val.status == 3) ? 'selected':((val.status > 3)? 'disabled':''))+">Dispatched</option><option value='4' "+((val.status == 4) ? 'selected':((val.status > 4)? 'disabled':''))+">Delivered</option></select></td><td>"+moment(val.updated_at).format('MMM DD, YYYY')+"</td></tr>";
+                        html +="<tr class='transaction-item-"+val.id+"'><td>"+val.product.name+"</td><td>"+val.quantity+"</td><td>"+val.amount+"</td><td><select class='form-control' id='transaction_status_"+val.id+"' onchange='changeStatus("+val.id+")' "+((val.status == '0')? 'disabled':'')+"><option value='0' "+((val.status == '0') ? 'selected':(val.status != '1')? 'disabled':'')+">Cancelled</option><option value='1' "+((val.status == 1) ? 'selected':((val.status > 1)? 'disabled':''))+">Received</option><option value='2' "+((val.status == 2) ? 'selected':((val.status > 2)? 'disabled':''))+">Confirmed</option><option value='3' "+((val.status == 3) ? 'selected':((val.status > 3)? 'disabled':''))+">Dispatched</option><option value='4' "+((val.status == 4) ? 'selected':((val.status > 4)? 'disabled':''))+">Delivered</option></select></td><td>"+moment(val.updated_at).format('MMM DD, YYYY')+"</td></tr>";
                     });
                     html +="</tbody></table>";
                     $('.transaction-details').html(html);
@@ -286,8 +286,10 @@
             success: function(res){
                 let val = res.transaction;
                 if(val) {
-                    let html ="<td>"+val.product.name+"</td><td>"+val.quantity+"</td><td>"+val.amount+"</td><td><select class='form-control' id='transaction_status_"+id+"' onchange='changeStatus("+id+")' "+((val.status == 0)? 'disabled':'')+"><option value='0' "+((val.status == 0) ? 'selected':(val.status != 1)? 'disabled':'')+">Cancelled</option><option value='1' "+((val.status == 1) ? 'selected':((val.status > 1)? 'disabled':''))+">Received</option><option value='2' "+((val.status == 2) ? 'selected':((val.status > 2)? 'disabled':''))+">Confirmed</option><option value='3' "+((val.status == 3) ? 'selected':((val.status > 3)? 'disabled':''))+">Dispatched</option><option value='4' "+((val.status == 4) ? 'selected':((val.status > 4)? 'disabled':''))+">Delivered</option></select></td><td>"+moment(val.updated_at).format('MMM DD, YYYY')+"</td>";
-                    $('.transaction-item-'+id).html(html);
+                    console.log(val.status);
+                    let html ="<tr class='transaction-item-"+val.id+"'><td>"+val.product.name+"</td><td>"+val.quantity+"</td><td>"+val.amount+"</td><td><select class='form-control' id='transaction_status_"+id+"' onchange='changeStatus("+id+")' "+((val.status == '0')? 'disabled':'')+"><option value='0' "+((val.status == '0') ? 'selected':(val.status != '1')? 'disabled':'')+">Cancelled</option><option value='1' "+((val.status == 1) ? 'selected':((val.status > 1)? 'disabled':''))+">Received</option><option value='2' "+((val.status == 2) ? 'selected':((val.status > 2)? 'disabled':''))+">Confirmed</option><option value='3' "+((val.status == 3) ? 'selected':((val.status > 3)? 'disabled':''))+">Dispatched</option><option value='4' "+((val.status == 4) ? 'selected':((val.status > 4)? 'disabled':''))+">Delivered</option></select></td><td>"+moment(val.updated_at).format('MMM DD, YYYY HH:mm')+"</td></tr>";
+                    $('.transaction-item-'+id).remove();
+                    $('#transaction-tbl-body').append(html);
                     swal("Success", "Status changed successfully", "success");
                 }
             }

@@ -19,16 +19,6 @@ class OrderRepository
     }
 
     /**
-     * fetch all users
-     *
-     * @return \App\User collection
-     */
-    public function getProducts()
-    {
-        return $this->model->get();
-    }
-
-    /**
      * fetch a single users by id
      *
      * @param  $id
@@ -56,8 +46,8 @@ class OrderRepository
      * @param  $id
      * @return boolean
      */
-    public function cancelOrder($id)
+    public function changeOrderStatus($id, $status)
     {
-        return $this->model->find($id)->update(["status" => 2]);
+        return $this->model->find($id)->update(["status" => $status]);
     }
 }

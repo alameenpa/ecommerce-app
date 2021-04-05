@@ -21,6 +21,7 @@ class CreateTransactionsTable extends Migration
             $table->integer('status');
             $table->integer('updated_by');
             $table->double('amount');
+            $table->boolean('active');
             $table->timestamps();
             $table->softDeletes();
         });

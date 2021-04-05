@@ -23,13 +23,14 @@ class TransactionController extends Controller
      */
     public function index(Request $request)
     {
-        $transactions = $this->transactionRepository->getTransactionByOrderId($request->get('id'));
+        $transactions = $this->transactionRepository->getActiveTransactionByOrderId($request->get('id'));
         return response()->json(['transactions' => $transactions]);
     }
 
     public function status(Request $request)
     {
-        $status = $this->transactionRepository->statusUpdate($request->get('id'), $request->get('transaction_status'));
-        return response()->json(['transaction' => $this->transactionRepository->getTransaction($request->get('id'))]);
+        $transaction = $this->transactionRepository->statusUpdate($request->get('id'), $request->get('transaction_status'));
+        $status = $this->transactionRepository->changeOrderStatusByTransactionStatusChange($request->get('id'));
+        return response()->json(['transaction' => $transaction]);
     }
 }

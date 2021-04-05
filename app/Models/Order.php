@@ -16,4 +16,9 @@ class Order extends Model
     {
         return $this->hasMany(Transaction::class, 'order_id', 'id');
     }
+
+    public function scopeNonCompletedTransactions($query)
+    {
+        return $query->whereNotIn('status', [0, 4]);
+    }
 }

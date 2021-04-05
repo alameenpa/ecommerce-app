@@ -72,7 +72,8 @@ class OrderController extends Controller
                     "quantity" => $item->quantity,
                     "updated_by" => Auth::user()->id,
                     "status" => 1,
-                    'amount' => ($item->product_price * $item->quantity),
+                    "amount" => ($item->product_price * $item->quantity),
+                    "active" => 1,
                 ];
 
                 //create new transactions
@@ -105,7 +106,7 @@ class OrderController extends Controller
     public function cancel(Request $request)
     {
         try {
-            $status = $this->orderRepository->cancelOrder($request->id);
+            $status = $this->orderRepository->changeOrderStatus($request->id, 2);
             return Response()->json(array('success' => true));
         } catch (\Exception $e) {
             return response()->json(array('success' => false, 'message' => 'Operation Failed, please contact admin'));
