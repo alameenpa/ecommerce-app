@@ -202,7 +202,7 @@ class ApiController extends Controller
                     "product_id" => $item->product_id,
                     "order_id" => $order->id,
                     "quantity" => $item->quantity,
-                    "updated_by" => Auth::user()->id,
+                    "updated_by" => auth()->user()->id,
                     "status" => 1,
                     "amount" => ($item->product_price * $item->quantity),
                     "active" => 1,

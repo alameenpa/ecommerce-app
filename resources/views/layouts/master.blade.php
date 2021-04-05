@@ -43,9 +43,40 @@
         border:0;
         margin:0;
     }
+
+    .overlay{
+        display: none;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 99999;
+        background: rgba(255,255,255,0.8) url("images/spinner.gif") center no-repeat;
+    }
+    /* Turn off scrollbar when body element has the loading class */
+    body.loading{
+        overflow: hidden;
+    }
+    /* Make spinner image visible when body element has the loading class */
+    body.loading .overlay{
+        display: block;
+    }
       </style>
+      <script>
+        // Add remove loading class on body element based on Ajax request status
+        $(document).on({
+            ajaxStart: function(){
+                $("body").addClass("loading");
+            },
+            ajaxStop: function(){
+                $("body").removeClass("loading");
+            }
+        });
+      </script>
    </head>
    <body class="antialiased  bg-body">
+   <div class="overlay"></div>
    <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
