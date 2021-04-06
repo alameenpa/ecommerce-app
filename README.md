@@ -56,7 +56,7 @@ Copy the example env file and make the required configuration changes in the .en
 
 -   cp .env.example .env
 
-Set the database connection in .env
+Set the database connection,email configurations in .env
 
 Generate a new application key
 
