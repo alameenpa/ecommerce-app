@@ -75,4 +75,13 @@ class UserRepository
         return true;
     }
 
+    /**
+     * get Users count
+     * @return integer
+     */
+    public function getTotalNumberOfUsers()
+    {
+        return $this->model->count();
+    }
+
 }

@@ -5,10 +5,11 @@
          <div class="row">
             <div class="col-lg-12 margin-tb">
                <div class="pull-left">
-                    <h2><i class="fa fa-users" aria-hidden="true"></i>&nbsp;Products List</h2>
+                    <h2><i class="fab fa-product-hunt"></i>&nbsp;Products List</h2>
                </div>
                <div class="mb-3" style="float: right;">
-                  <a class="btn btn-info" onClick="addProduct()" href="javascript:void(0)"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;New</a>
+                  <a class="btn btn-info" onClick="addProduct()" href="javascript:void(0)" title="Create New Product"><i class="fab fa-product-hunt"></i>&nbsp;New</a>
+                  <a class="btn btn-warning" href="javascript:void(0)" onclick="backwardNavigation()" title="Back to Dashboard"><i class="fas fa-arrow-circle-left"></i></a>
                </div>
             </div>
             <div class="card-body">
@@ -72,7 +73,7 @@
 
     function addProduct(){
         $('#productForm').trigger("reset");
-        $('#productModal').html("New Product");
+        $('#productModal').html("<i class='fab fa-product-hunt'></i>&nbsp;New Product");
         $('#product-modal').modal('show');
         $('#id').val('');
     }
@@ -84,7 +85,7 @@
             data: {'id':id},
             dataType: 'json',
             success: function(res){
-                $('#productModal').html("Edit Product");
+                $('#productModal').html("<i class='fab fa-product-hunt'></i>&nbsp;Edit Product");
                 $('#product-modal').modal('show');
                 $('#id').val(res.id);
                 $('#name').val(res.name);

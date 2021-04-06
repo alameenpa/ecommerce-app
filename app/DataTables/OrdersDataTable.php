@@ -19,7 +19,7 @@ class OrdersDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('order', function ($row) {
+            ->addColumn('id', function ($row) {
                 return 'ORD-' . $row->id;
             })
             ->addColumn('status', function ($row) {
@@ -45,7 +45,9 @@ class OrdersDataTable extends DataTable
      */
     public function query(Order $model)
     {
-        return $model::with('transactions')->newQuery();
+        // return $model::with('transactions')->newQuery();
+        $data = $model::select('id', 'status', 'amount', 'address');
+        return $this->applyScopes($data);
     }
 
     /**
@@ -59,11 +61,10 @@ class OrdersDataTable extends DataTable
             ->setTableId('list-orders')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('Bfrtip')
             ->orderBy(1)
             ->parameters([
                 'dom' => 'Bfrtip',
-                'buttons' => ['excel', 'csv', 'print'],
+                'buttons' => ['excel', 'print'],
             ]);
     }
 
@@ -75,14 +76,15 @@ class OrdersDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::computed('order'),
+            Column::computed('id'),
             Column::computed('status'),
             Column::make('amount')->addClass('text-center'),
             Column::make('address'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
-                ->addClass('text-center'),
+                ->addClass('text-center')
+                ->width(250),
         ];
     }
 

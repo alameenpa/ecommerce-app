@@ -73,6 +73,10 @@
                 $("body").removeClass("loading");
             }
         });
+
+        function backwardNavigation() {
+            window.history.back();
+        }
       </script>
    </head>
    <body class="antialiased  bg-body">

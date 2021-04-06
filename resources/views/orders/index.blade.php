@@ -5,10 +5,11 @@
          <div class="row">
             <div class="col-lg-12 margin-tb">
                <div class="pull-left">
-                    <h2><i class="fa fa-users" aria-hidden="true"></i>&nbsp;Orders List</h2>
+                    <h2><i class="fas fa-truck"></i>&nbsp;Orders List</h2>
                </div>
                <div class="mb-3" style="float: right;">
-                  <a class="btn btn-info" onClick="addOrder()" href="javascript:void(0)"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;New</a>
+                  <a class="btn btn-info" onClick="addOrder()" href="javascript:void(0)" title="Create New Order"><i class="fas fa-truck"></i>&nbsp;New</a>
+                  <a class="btn btn-warning" href="javascript:void(0)" onclick="backwardNavigation()" title="Back to Dashboard"><i class="fas fa-arrow-circle-left"></i></a>
                </div>
             </div>
             <div class="card-body">
@@ -219,7 +220,7 @@
         $('.items-list-body').html('');
         $('#order_hidden_input').val('');
         $('#orderForm').trigger("reset");
-        $('#orderModal').html("New Order");
+        $('#orderModal').html("<i class='fas fa-truck'></i>&nbsp;New Order");
         $('#order-modal').modal('show');
         $('#id').val('');
     }
@@ -232,7 +233,7 @@
             data: {'id':id},
             dataType: 'json',
             success: function(res){
-                $('#orderModal').html("Edit Order");
+                $('#orderModal').html("<i class='fas fa-truck'></i>&nbsp;Edit Order");
                 $('#order-modal').modal('show');
                 $('#id').val(res.id);
                 $('#address').val(res.address);
@@ -262,11 +263,11 @@
             dataType: 'json',
             success: function(res){
                 if(res.transactions) {
-                    $('#transactionModal').html("Transactions Details");
+                    $('#transactionModal').html("<i class='fas fa-people-carry'></i>&nbsp;Transactions Details");
                     $('#transaction-modal').modal('show');
                     let html ="<table class='table table-striped transaction-table'><thead><th>Product</th><th>Quantity</th><th>Price</th><th>Status</th><th>Last Updated</th></thead><tbody id='transaction-tbl-body'>";
                     $.each(res.transactions, function(ind, val){
-                        html +="<tr class='transaction-item-"+val.id+"'><td>"+val.product.name+"</td><td>"+val.quantity+"</td><td>"+val.amount+"</td><td><select class='form-control' id='transaction_status_"+val.id+"' onchange='changeStatus("+val.id+")' "+((val.status == '0')? 'disabled':'')+"><option value='0' "+((val.status == '0') ? 'selected':(val.status != '1')? 'disabled':'')+">Cancelled</option><option value='1' "+((val.status == 1) ? 'selected':((val.status > 1)? 'disabled':''))+">Received</option><option value='2' "+((val.status == 2) ? 'selected':((val.status > 2)? 'disabled':''))+">Confirmed</option><option value='3' "+((val.status == 3) ? 'selected':((val.status > 3)? 'disabled':''))+">Dispatched</option><option value='4' "+((val.status == 4) ? 'selected':((val.status > 4)? 'disabled':''))+">Delivered</option></select></td><td>"+moment(val.updated_at).format('MMM DD, YYYY HH:mm A')+"</td></tr>";
+                        html +="<tr class='transaction-item-"+val.id+"'><td>"+val.product.name+"</td><td class='text-center'>"+val.quantity+"</td><td class='text-center'>"+val.amount+"</td><td><select class='form-control' id='transaction_status_"+val.id+"' onchange='changeStatus("+val.id+")' "+((val.status == '0')? 'disabled':'')+"><option value='0' "+((val.status == '0') ? 'selected':(val.status != '1')? 'disabled':'')+">Cancelled</option><option value='1' "+((val.status == 1) ? 'selected':((val.status > 1)? 'disabled':''))+">Received</option><option value='2' "+((val.status == 2) ? 'selected':((val.status > 2)? 'disabled':''))+">Confirmed</option><option value='3' "+((val.status == 3) ? 'selected':((val.status > 3)? 'disabled':''))+">Dispatched</option><option value='4' "+((val.status == 4) ? 'selected':((val.status > 4)? 'disabled':''))+">Delivered</option></select></td><td>"+moment(val.updated_at).format('MMM DD, YYYY HH:mm A')+"</td></tr>";
                     });
                     html +="</tbody></table>";
                     $('.transaction-details').html(html);

@@ -74,4 +74,13 @@ class OrderRepository
             ->notify(new NewOrderNotify($order));
         return true;
     }
+
+    /**
+     * get Orders count
+     * @return integer
+     */
+    public function getTotalNumberOfOrders()
+    {
+        return $this->model->count();
+    }
 }

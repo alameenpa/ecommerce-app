@@ -33,7 +33,9 @@ class UsersDataTable extends DataTable
      */
     public function query(User $model)
     {
-        return $model->newQuery();
+        // return $model->newQuery();
+        $data = $model::select('name', 'email');
+        return $this->applyScopes($data);
     }
 
     /**
@@ -51,7 +53,7 @@ class UsersDataTable extends DataTable
             ->orderBy(0)
             ->parameters([
                 'dom' => 'Bfrtip',
-                'buttons' => ['excel', 'csv', 'print'],
+                'buttons' => ['excel', 'print'],
             ]);
     }
 

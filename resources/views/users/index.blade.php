@@ -8,7 +8,8 @@
                     <h2><i class="fa fa-users" aria-hidden="true"></i>&nbsp;Users List</h2>
                </div>
                <div class="mb-3" style="float: right;">
-                  <a class="btn btn-info" onClick="addUser()" href="javascript:void(0)"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;New</a>
+                  <a class="btn btn-info" onClick="addUser()" href="javascript:void(0)" title="Create New User"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;New</a>
+                  <a class="btn btn-warning" href="javascript:void(0)" onclick="backwardNavigation()" title="Back to Dashboard"><i class="fas fa-arrow-circle-left"></i></a>
                </div>
             </div>
             <div class="card-body">
@@ -65,7 +66,7 @@
 
     function addUser(){
         $('#userForm').trigger("reset");
-        $('#userModal').html("New User");
+        $('#userModal').html("<i class='fa fa-user' aria-hidden='true'></i>&nbsp;New User");
         $('#user-modal').modal('show');
         $('#id').val('');
     }
@@ -77,7 +78,7 @@
             data: {'id':id},
             dataType: 'json',
             success: function(res){
-                $('#userModal').html("Edit User");
+                $('#userModal').html("<i class='fa fa-user' aria-hidden='true'></i>&nbsp;Edit User");
                 $('#user-modal').modal('show');
                 $('#id').val(res.id);
                 $('#name').val(res.name);

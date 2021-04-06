@@ -2,18 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Repository\OrderRepository;
+use App\Repository\ProductRepository;
+use App\Repository\UserRepository;
 
 class HomeController extends Controller
 {
+    protected $userRepository, $productRepository, $orderRepository;
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct(
+        UserRepository $userRepository,
+        ProductRepository $productRepository,
+        OrderRepository $orderRepository
+    ) {
         $this->middleware('auth');
+        $this->userRepository = $userRepository;
+        $this->productRepository = $productRepository;
+        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -23,6 +33,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+
+        $users = $this->userRepository->getTotalNumberOfUsers();
+        $products = $this->productRepository->getTotalNumberOfProducts();
+        $orders = $this->orderRepository->getTotalNumberOfOrders();
+        return view('home', compact('users', 'products', 'orders'));
     }
 }

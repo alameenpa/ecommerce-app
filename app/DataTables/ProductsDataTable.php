@@ -33,7 +33,9 @@ class ProductsDataTable extends DataTable
      */
     public function query(Product $model)
     {
-        return $model->newQuery();
+        // return $model->newQuery();
+        $data = $model::select('name', 'description', 'price');
+        return $this->applyScopes($data);
     }
 
     /**
@@ -51,7 +53,7 @@ class ProductsDataTable extends DataTable
             ->orderBy(0)
             ->parameters([
                 'dom' => 'Bfrtip',
-                'buttons' => ['excel', 'csv', 'print'],
+                'buttons' => ['excel', 'print'],
             ]);
     }
 

@@ -60,4 +60,13 @@ class ProductRepository
     {
         return $this->model->find($id)->delete();
     }
+
+    /**
+     * get Products count
+     * @return integer
+     */
+    public function getTotalNumberOfProducts()
+    {
+        return $this->model->count();
+    }
 }
