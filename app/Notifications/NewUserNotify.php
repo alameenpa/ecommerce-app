@@ -44,7 +44,9 @@ class NewUserNotify extends Notification
         return (new MailMessage)
             ->subject('Welcome Mail')
             ->greeting('Hello')
-            ->line('Thank you for signup with us!');
+            ->line('Thank you for signup with us!')
+            ->line('Use the below button to reset your password')
+            ->action('Reset password', url('/password/reset'));
     }
 
     /**
