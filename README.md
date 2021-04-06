@@ -38,7 +38,7 @@ Laravel is accessible, powerful, and provides tools required for large, robust a
 
 Clone the repository
 
--   git clone https://github.com/alameenpa/school-managment-system.git
+-   git clone https://github.com/alameenpa/ecommerce-app.git
 
 Switch to the repo folder
 
